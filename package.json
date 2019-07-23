@@ -1,0 +1,14 @@
+{
+  "name": "LeapEarthquakeVisualisation",
+  "version": "1.0.0",
+  "description": "Earthquakes visualisation with Leap Motion",
+  "main": "main.js",
+  "author": "Apidcloud <luisapidcloud@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "4.37.0"
+  },
+  "dependencies": {
+    "three": "0.106.2"
+  }
+}
