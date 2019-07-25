@@ -30,6 +30,8 @@ let lastRotation = [20, 30, 10];
 let quaternion = new THREE.Quaternion();
 let lastPositions = null;
 
+let euler = new THREE.Euler();
+
 // line helper variables
 //let vertArray = null;
 //let lineGeometry = null;
@@ -299,6 +301,10 @@ function rotateAroundWorldAxis(delta, object, axis, radians) {
 function handleBasicInteraction(frame, object, delta){
   let rotationVector = frame ? getRotationFromFrame(frame) : null;
 
+  // reset two hand interaction hand positions, 
+  // so it doesn't "jump" when 2 hands are used again
+  lastPositions = null;
+
   // keep last rotation when not interacting.
   // fallback to the default value of lastRotation (when leap hasn't been used yet)
   if (rotationVector === null) {
@@ -364,6 +370,10 @@ function handleTwoHandInteraction(frame, object, delta){
 
     //update last position to have a term of comparison
     lastPositions = handsPositions;
+
+    //update last euler rotation for fallback when no hands are present
+    euler.setFromQuaternion(quaternion);
+    lastRotation = new THREE.Vector3(euler.y, euler.x, euler.z);
   }
 }
 
