@@ -39,6 +39,82 @@ let lastPositions = null;
 //let vFar = new THREE.Vector3();
 //let raycaster = new THREE.Raycaster();
 
+function main() {
+  const canvas = document.querySelector('#canvas');
+  const renderer = new THREE.WebGLRenderer({canvas});
+
+  const fov = 65;
+  const aspect = 2;  // the canvas default
+  const near = 0.1;
+  const far = 1000;
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.set(0, 0, 150);
+  
+  const clock = new THREE.Clock();
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x72645b);
+
+  /* lineGeometry = new THREE.Geometry();
+	vertArray = lineGeometry.vertices;
+	vertArray.push( new THREE.Vector3(-50, -100, 30), new THREE.Vector3(-150, 50, 70) );
+	let lineMaterial = new THREE.LineBasicMaterial( { color: 0x00cc00 } );
+  let line = new THREE.Line( lineGeometry, lineMaterial );
+  line.computeLineDistances(); */
+
+  // arrow helper
+  //let arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, 0x00cc00 );
+  //scene.add( arrow );
+
+	//scene.add(line);
+
+  // PLY file
+  const loader = new PLYLoader();
+  let group = new THREE.Object3D();
+
+  loader.load(plyModelPath, function ( geometry ) {
+
+    const material = new THREE.PointCloudMaterial({
+      color: 0xffffff,
+      size: 0.4,
+      opacity: 0.8,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      map: generateSprite()
+  });
+
+    group = new THREE.PointCloud(geometry, material);
+    group.sortParticles = true;
+    // adjust initial rotation
+    group.rotateX(180);
+    scene.add(group);
+
+    prepareLeapMotion();
+  });
+
+  function render() {
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+
+    // update leap motion connectivity information
+    updateLeapInfo();
+
+    // handle interaction with leap motion
+    handleInteraction(clock.getDelta(), group);
+    
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+}
+
+main();
+
 function prepareLeapMotion()
 {
 	isServerConnected = false;
@@ -318,79 +394,3 @@ function resizeRendererToDisplaySize(renderer) {
   }
   return needResize;
 }
-
-function main() {
-  const canvas = document.querySelector('#canvas');
-  const renderer = new THREE.WebGLRenderer({canvas});
-
-  const fov = 65;
-  const aspect = 2;  // the canvas default
-  const near = 0.1;
-  const far = 1000;
-  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.set(0, 0, 150);
-  
-  const clock = new THREE.Clock();
-
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x72645b);
-
-  /* lineGeometry = new THREE.Geometry();
-	vertArray = lineGeometry.vertices;
-	vertArray.push( new THREE.Vector3(-50, -100, 30), new THREE.Vector3(-150, 50, 70) );
-	let lineMaterial = new THREE.LineBasicMaterial( { color: 0x00cc00 } );
-  let line = new THREE.Line( lineGeometry, lineMaterial );
-  line.computeLineDistances(); */
-
-  // arrow helper
-  //let arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, 0x00cc00 );
-  //scene.add( arrow );
-
-	//scene.add(line);
-
-  // PLY file
-  const loader = new PLYLoader();
-  let group = new THREE.Object3D();
-
-  loader.load(plyModelPath, function ( geometry ) {
-
-    const material = new THREE.PointCloudMaterial({
-      color: 0xffffff,
-      size: 0.4,
-      opacity: 0.8,
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      map: generateSprite()
-  });
-
-    group = new THREE.PointCloud(geometry, material);
-    group.sortParticles = true;
-    // adjust initial rotation
-    group.rotateX(180);
-    scene.add(group);
-
-    prepareLeapMotion();
-  });
-
-  function render() {
-    if (resizeRendererToDisplaySize(renderer)) {
-      const canvas = renderer.domElement;
-      camera.aspect = canvas.clientWidth / canvas.clientHeight;
-      camera.updateProjectionMatrix();
-    }
-
-    // update leap motion connectivity information
-    updateLeapInfo();
-
-    // handle interaction with leap motion
-    handleInteraction(clock.getDelta(), group);
-    
-    renderer.render(scene, camera);
-
-    requestAnimationFrame(render);
-  }
-
-  requestAnimationFrame(render);
-}
-
-main();
