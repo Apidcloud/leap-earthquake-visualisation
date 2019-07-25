@@ -6,7 +6,7 @@ const plyModelPath = '/earthquakes-model/earthquakes.ply'
 // the minimum hand velocity to manually rotate with 1 hand
 const dragVelocityThreshold = 100;
 
-// simple interaction rolling speed (affects every dimension)
+// simple interaction (1 hand) rolling speed 
 const rollSpeed = 0.01;
 
 // angle adjustements when doing a fist
@@ -86,18 +86,18 @@ function updateLeapInfo()
 }
 
 function generateSprite() {
-  var canvas = document.createElement('canvas');
+  let canvas = document.createElement('canvas');
   canvas.width = 16;
   canvas.height = 16;
-  var context = canvas.getContext('2d');
-  var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+  let context = canvas.getContext('2d');
+  let gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
   gradient.addColorStop(0, 'rgba(0,255,255,1)');
   gradient.addColorStop(0.2, 'rgba(0,255,255,1)');
   gradient.addColorStop(0.4, 'rgba(0,0,64,1)');
   gradient.addColorStop(1, 'rgba(0,0,0,1)');
   context.fillStyle = gradient;
   context.fillRect(0, 0, canvas.width, canvas.height);
-  var texture = new THREE.Texture(canvas);
+  let texture = new THREE.Texture(canvas);
   texture.needsUpdate = true;
   return texture;
 }
@@ -199,7 +199,7 @@ function getManualPitch(hand){
 
 function extendedFingersCount(hand)
 {
-	var count = 0;
+	let count = 0;
 	hand.fingers.forEach(function(finger){
 	    if (finger.extended) {
 	    	count++;
@@ -343,7 +343,7 @@ function main() {
   line.computeLineDistances(); */
 
   // arrow helper
-  //var arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, 0x00cc00 );
+  //let arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, 0x00cc00 );
   //scene.add( arrow );
 
 	//scene.add(line);
