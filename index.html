@@ -26,8 +26,18 @@
         left: 0px;
       }
 
+      #instructions {
+        position: fixed;
+          bottom: 0;
+      }
+
+      #leapInfo {
+          display: none;
+          color: rgb(221, 92, 92);
+      }
+
       h2 {
-        color: rgba(103, 182, 255, 0.753);
+        color: rgba(137, 183, 226, 0.753);
         margin: 5px 0px;
       }
 
@@ -38,7 +48,7 @@
       .link, .link:active, .info:visited {
         text-decoration: none;
         font-weight: 700;
-        color: rgba(103, 182, 255, 0.753);
+        color: rgba(137, 183, 226, 0.753);
         position: relative;
       }
       
@@ -65,7 +75,7 @@
       }
 
       .github-corner {
-        fill:rgba(103, 182, 255, 0.753)
+        fill:rgba(137, 183, 226, 0.753)
       }
 
       .github-corner:hover .octo-arm {
@@ -128,8 +138,15 @@
     <div id="description">
       <h2>Leap Earthquake Visualisation</h2>
       <p>Showing <a class="link alt" target="_blank" href="https://sketchfab.com/3d-models/earthquakes-2000-to-2019-894ad84ceb8b444a91fbc05f20530bcd">Earthquakes model</a> by <a class="link alt" target="_blank" href="https://twitter.com/norgeotloic">Loïc Norgeot</a> using <a class="link alt" target="_blank" href="https://threejs.org/">Three.js</a></p>
-      <p></p>
-      <p></p>
+      <p>Interacting with <a class="link alt" target="_blank" href="https://www.leapmotion.com/">Leap Motion</a></p>
+    </div>
+    <div id="leapInfo"></div>
+
+    <div id="instructions">
+      <h2>Instructions</h2>
+      <p>Use one of your fists to manually control the rotation, or make your hand flat to have a continuous rotation.</p>
+      <p>Alternatively, when using both hands, the first will control the heading manually, while the second controls the pitch.</p>
+      <p>If you move quick enough with either, you can prevent inadvertent dragging as the hand returns to a particular position, which allows you to repeat the same movement and thus rotate in 360º.</p>
     </div>
 
     <!-- imports -->
