@@ -308,11 +308,11 @@ function rotateAroundWorldAxis(delta, object, axis, radians) {
   object.rotation.setFromRotationMatrix(object.matrix);
 }
 
-let vertArray = null;
-let lineGeometry = null;
-let dir = new THREE.Vector3();
-let vFar = new THREE.Vector3();
-let raycaster = new THREE.Raycaster();
+//let vertArray = null;
+//let lineGeometry = null;
+//let dir = new THREE.Vector3();
+//let vFar = new THREE.Vector3();
+//let raycaster = new THREE.Raycaster();
 
 function main() {
   const canvas = document.querySelector('#canvas');
@@ -330,15 +330,16 @@ function main() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x72645b);
 
-  lineGeometry = new THREE.Geometry();
+  /* lineGeometry = new THREE.Geometry();
 	vertArray = lineGeometry.vertices;
 	vertArray.push( new THREE.Vector3(-50, -100, 30), new THREE.Vector3(-150, 50, 70) );
 	let lineMaterial = new THREE.LineBasicMaterial( { color: 0x00cc00 } );
   let line = new THREE.Line( lineGeometry, lineMaterial );
-  line.computeLineDistances();
+  line.computeLineDistances(); */
 
-  var arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, 0x00cc00 );
-  scene.add( arrow );
+  // arrow helper
+  //var arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, 0x00cc00 );
+  //scene.add( arrow );
 
 	//scene.add(line);
 
@@ -400,14 +401,7 @@ function main() {
     return needResize;
   }
 
-  function render() {
-    if (resizeRendererToDisplaySize(renderer)) {
-      const canvas = renderer.domElement;
-      camera.aspect = canvas.clientWidth / canvas.clientHeight;
-      camera.updateProjectionMatrix();
-    }
-
-    const frame = leapController ? leapController.frame() : null;
+  function handleBasicInteraction(frame, delta){
     let rotationVector = frame ? getRotationFromFrame(frame) : null;
 
     // keep last rotation when not interacting.
@@ -418,75 +412,8 @@ function main() {
       lastRotation = rotationVector;
     }
 
-    // Render arrow with direction between hands
-    const handsPositions = getHandsPositionsInWorldSpace(frame);
-
-    if (handsPositions !==  null){
-      if (lastPositions === null){
-        lastPositions = handsPositions;
-      }
-
-      let vDir = dir.subVectors(handsPositions[1], handsPositions[0]);
-
-      //raycaster.set(handsPosition[0], vDir.normalize());
-      //raycaster.far = vFar.subVectors(handsPosition[1], handsPosition[0]).length();
-
-      arrow.position.copy(handsPositions[0]);
-      arrow.setLength(vDir.length());
-      arrow.setDirection(vDir.normalize());
-
-
-      handsPositions[0].normalize();
-      lastPositions[0].normalize();
-
-      handsPositions[1].normalize();
-      lastPositions[1].normalize();
-
-      quaternion.setFromUnitVectors(lastPositions[0], handsPositions[0]);
-      group.applyQuaternion(quaternion);
-
-      quaternion.setFromUnitVectors(lastPositions[1], handsPositions[1]);
-      group.applyQuaternion(quaternion);
-
-      lastPositions = handsPositions;
-
-      /* var euler = new THREE.Euler();
-      euler.setFromQuaternion(quaternion);
-
-      return [euler.y, euler.x, euler.z]; */
-    }
-
-
-    // Render line between hands
-    /* const handsPosition = getHandsPositionFromFrame(frame);
-
-    if (lineGeometry !== null && handsPosition !== null) {
-      const iBox = frame.interactionBox;
-      let normalizedPoint1 = iBox.normalizePoint(handsPosition[0], false);
-      let normalizedPoint2 = iBox.normalizePoint(handsPosition[1], false);
-
-      const heightHalf = canvas.clientHeight / 2;
- 
-      const spaceConvertedY1 = normalizedPoint1[1] * canvas.clientHeight - heightHalf;
-      const spaceConvertedY2 = normalizedPoint2[1] * canvas.clientHeight - heightHalf;
-
-      // push new vertices
-      const hand1 = new THREE.Vector3(handsPosition[0][0], spaceConvertedY1, handsPosition[0][2]);
-      const hand2 = new THREE.Vector3(handsPosition[1][0], spaceConvertedY2, handsPosition[1][2]);
-
-      // empty line vertices
-      vertArray.length = 0;
-      vertArray.push(hand1, hand2);
-      // update
-      lineGeometry.verticesNeedUpdate = true;
-    } */
-
-    const delta = clock.getDelta();
-
-    updateLeapInfo();
-
     // yaw
-    /* if (rotationVector[0] !== 0) {
+    if (rotationVector[0] !== 0) {
       // rotate around world's y axis
       rotateAroundWorldAxis(delta, group, new THREE.Vector3(0,1,0), rotationVector[0]);
     }
@@ -501,7 +428,77 @@ function main() {
     if (rotationVector[2] !== 0) {
       // rotate around world's z axis
       rotateAroundWorldAxis(delta, group, new THREE.Vector3(0,0,1), rotationVector[2]);
-    } */
+    }
+  }
+
+  function handleTwoHandInteraction(frame, delta){
+    // Render arrow with direction between hands
+    const handsPositions = getHandsPositionsInWorldSpace(frame);
+
+    if (handsPositions !==  null){
+      if (lastPositions === null){
+        lastPositions = handsPositions;
+      }
+      
+      // Arrow helper
+      /* 
+      let vDir = dir.subVectors(handsPositions[1], handsPositions[0]);
+
+      //raycaster.set(handsPosition[0], vDir.normalize());
+      //raycaster.far = vFar.subVectors(handsPosition[1], handsPosition[0]).length();
+
+      arrow.position.copy(handsPositions[0]);
+      arrow.setLength(vDir.length());
+      arrow.setDirection(vDir.normalize()); */
+
+      // one hand
+      handsPositions[0].normalize();
+      lastPositions[0].normalize();
+
+      // 2nd hand
+      handsPositions[1].normalize();
+      lastPositions[1].normalize();
+
+      // apply 1 hand rotation
+      quaternion.setFromUnitVectors(lastPositions[0], handsPositions[0]);
+      group.applyQuaternion(quaternion);
+
+      // apply 2nd hand rotation
+      quaternion.setFromUnitVectors(lastPositions[1], handsPositions[1]);
+      group.applyQuaternion(quaternion);
+
+      //update last position to have a term of comparison
+      lastPositions = handsPositions;
+    }
+  }
+
+  function handleInteraction(delta){
+    const frame = leapController ? leapController.frame() : null;
+
+    if (frame === null) {
+      return;
+    }
+
+    // for 1 hands or no hands
+    if (frame.hands.length < 2){
+      handleBasicInteraction(frame, delta);
+      return;
+    }
+
+    // otherwise, handle 2 hands (or the first two :) )
+    handleTwoHandInteraction(frame, delta);
+  }
+
+  function render() {
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+
+    handleInteraction(clock.getDelta());
+
+    updateLeapInfo();
     
     renderer.render(scene, camera);
 
