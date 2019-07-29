@@ -247,6 +247,7 @@ function getHandsPositionsInWorldSpace(frame){
     return null;
   }
   
+  // this y conversion needs revision
   const iBox = frame.interactionBox;
   let normalizedPoint1 = iBox.normalizePoint(handsPosition[0], false);
   let normalizedPoint2 = iBox.normalizePoint(handsPosition[1], false);
@@ -336,45 +337,49 @@ function handleTwoHandInteraction(frame, object, delta){
   // Render arrow with direction between hands
   const handsPositions = getHandsPositionsInWorldSpace(frame);
 
-  if (handsPositions !==  null){
-    if (lastPositions === null){
-      lastPositions = handsPositions;
-    }
-    
-    // Arrow helper
-    /* 
-    let vDir = dir.subVectors(handsPositions[1], handsPositions[0]);
-
-    //raycaster.set(handsPosition[0], vDir.normalize());
-    //raycaster.far = vFar.subVectors(handsPosition[1], handsPosition[0]).length();
-
-    arrow.position.copy(handsPositions[0]);
-    arrow.setLength(vDir.length());
-    arrow.setDirection(vDir.normalize()); */
-
-    // one hand
-    handsPositions[0].normalize();
-    lastPositions[0].normalize();
-
-    // 2nd hand
-    handsPositions[1].normalize();
-    lastPositions[1].normalize();
-
-    // apply 1 hand rotation
-    quaternion.setFromUnitVectors(lastPositions[0], handsPositions[0]);
-    object.applyQuaternion(quaternion);
-
-    // apply 2nd hand rotation
-    quaternion.setFromUnitVectors(lastPositions[1], handsPositions[1]);
-    object.applyQuaternion(quaternion);
-
-    //update last position to have a term of comparison
-    lastPositions = handsPositions;
-
-    //update last euler rotation for fallback when no hands are present
-    euler.setFromQuaternion(quaternion);
-    lastRotation = new THREE.Vector3(euler.y, euler.x, euler.z);
+  if (handsPositions ===  null){
+    return;
   }
+  
+  if (lastPositions === null){
+    lastPositions = handsPositions;
+    return;
+  }
+  
+  // Arrow helper
+  /* 
+  let vDir = dir.subVectors(handsPositions[1], handsPositions[0]);
+
+  //raycaster.set(handsPosition[0], vDir.normalize());
+  //raycaster.far = vFar.subVectors(handsPosition[1], handsPosition[0]).length();
+
+  arrow.position.copy(handsPositions[0]);
+  arrow.setLength(vDir.length());
+  arrow.setDirection(vDir.normalize()); */
+
+  // one hand
+  handsPositions[0].normalize();
+  lastPositions[0].normalize();
+
+  // 2nd hand
+  handsPositions[1].normalize();
+  lastPositions[1].normalize();
+
+  // apply 1 hand rotation
+  quaternion.setFromUnitVectors(lastPositions[0], handsPositions[0]);
+  object.applyQuaternion(quaternion);
+
+  // apply 2nd hand rotation
+  quaternion.setFromUnitVectors(lastPositions[1], handsPositions[1]);
+  object.applyQuaternion(quaternion);
+
+  //update last position to have a term of comparison
+  lastPositions = handsPositions;
+
+  //update last euler rotation for fallback when no hands are present
+  euler.setFromQuaternion(quaternion);
+  lastRotation = new THREE.Vector3(euler.y, euler.x, euler.z);
+  
 }
 
 function handleInteraction(delta, object){
