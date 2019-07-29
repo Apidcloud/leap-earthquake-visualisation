@@ -37,9 +37,10 @@ let euler = new THREE.Euler();
 //let lineGeometry = null;
 
 // arrow helper variables
-//let dir = new THREE.Vector3();
-//let vFar = new THREE.Vector3();
-//let raycaster = new THREE.Raycaster();
+/* let arrow = null;
+let dir = new THREE.Vector3();
+let vFar = new THREE.Vector3();
+let raycaster = new THREE.Raycaster(); */
 
 function main() {
   const canvas = document.querySelector('#canvas');
@@ -62,13 +63,12 @@ function main() {
 	vertArray.push( new THREE.Vector3(-50, -100, 30), new THREE.Vector3(-150, 50, 70) );
 	let lineMaterial = new THREE.LineBasicMaterial( { color: 0x00cc00 } );
   let line = new THREE.Line( lineGeometry, lineMaterial );
-  line.computeLineDistances(); */
+  line.computeLineDistances(); 
+  scene.add(line); */
 
   // arrow helper
-  //let arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, 0x00cc00 );
-  //scene.add( arrow );
-
-	//scene.add(line);
+  /* arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, 0x00cc00 );
+  scene.add(arrow); */
 
   // PLY file
   const loader = new PLYLoader();
@@ -347,8 +347,7 @@ function handleTwoHandInteraction(frame, object, delta){
   }
   
   // Arrow helper
-  /* 
-  let vDir = dir.subVectors(handsPositions[1], handsPositions[0]);
+  /* let vDir = dir.subVectors(handsPositions[1], handsPositions[0]);
 
   //raycaster.set(handsPosition[0], vDir.normalize());
   //raycaster.far = vFar.subVectors(handsPosition[1], handsPosition[0]).length();
