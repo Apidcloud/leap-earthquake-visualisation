@@ -1,0 +1,2 @@
+Resources:
+3D Earthquakes Model (https://sketchfab.com/3d-models/earthquakes-2000-to-2019-894ad84ceb8b444a91fbc05f20530bcd) by Loïc Norgeot (https://twitter.com/norgeotloic) under https://creativecommons.org/licenses/by/4.0/
