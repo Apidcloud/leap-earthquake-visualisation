@@ -27,7 +27,8 @@ let options = null;
 let lastRotation = [20, 30, 10];
 
 // used to save last hand positions when using 2 hand interaction
-let quaternion = new THREE.Quaternion();
+let finalHandQuatRotation = new THREE.Quaternion();
+let hand2QuatRotation = new THREE.Quaternion();
 let lastPositions = null;
 
 let euler = new THREE.Euler();
@@ -365,18 +366,25 @@ function handleTwoHandInteraction(frame, object, delta){
   lastPositions[1].normalize();
 
   // apply 1 hand rotation
-  quaternion.setFromUnitVectors(lastPositions[0], handsPositions[0]);
+  /* quaternion.setFromUnitVectors(lastPositions[0], handsPositions[0]);
   object.applyQuaternion(quaternion);
 
   // apply 2nd hand rotation
   quaternion.setFromUnitVectors(lastPositions[1], handsPositions[1]);
-  object.applyQuaternion(quaternion);
+  object.applyQuaternion(quaternion); */
+
+  finalHandQuatRotation.setFromUnitVectors(lastPositions[0], handsPositions[0]);
+  hand2QuatRotation.setFromUnitVectors(lastPositions[1], handsPositions[1]);
+
+  // composition of quaternions
+  finalHandQuatRotation.multiply(hand2QuatRotation);
+  object.applyQuaternion(finalHandQuatRotation);
 
   //update last position to have a term of comparison
   lastPositions = handsPositions;
 
   //update last euler rotation for fallback when no hands are present
-  euler.setFromQuaternion(quaternion);
+  euler.setFromQuaternion(finalHandQuatRotation);
   lastRotation = new THREE.Vector3(euler.y, euler.x, euler.z);
   
 }
