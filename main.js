@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader';
-import Stats from 'stats.js';
+import Stats from './third-party/stats';
 
 const plyModelPath = '/earthquakes-model/earthquakes.ply'
 
@@ -34,7 +34,7 @@ let lastPositions = null;
 
 let euler = new THREE.Euler();
 
-let fpsStats = new Stats();
+let fpsStats = new Stats('#89B7E2', '#363636');
 
 // line helper variables
 //let vertArray = null;
@@ -50,8 +50,11 @@ function main() {
   const canvas = document.querySelector('#canvas');
   const renderer = new THREE.WebGLRenderer({canvas});
 
+  fpsStats.dom.style.position = 'relative';
+  fpsStats.pane
+
   fpsStats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-  document.body.appendChild(fpsStats.dom);
+  document.querySelector('#lowerRightBox').appendChild(fpsStats.dom);
 
   const fov = 65;
   const aspect = 2;  // the canvas default
