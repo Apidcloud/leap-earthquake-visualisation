@@ -10,6 +10,7 @@
     "parcel-plugin-static-files-copy": "2.1.2"
   },
   "dependencies": {
+    "stats.js": "0.17.0",
     "three": "0.106.2"
   },
   "scripts": {
