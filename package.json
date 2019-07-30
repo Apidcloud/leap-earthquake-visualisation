@@ -13,7 +13,8 @@
     "three": "0.106.2"
   },
   "scripts": {
-    "start": "parcel index.html --port 8080 --open"
+    "start": "parcel index.html --port 8080 --open",
+    "build": "parcel index.html"
   },
   "staticFiles": {
     "staticPath": "public",
