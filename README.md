@@ -6,7 +6,7 @@
 ![with-water](https://img.shields.io/badge/made%20with-%F0%9F%92%A7%20water-blue.svg)
 ![with-love](https://img.shields.io/badge/made%20with-%F0%9F%92%8C-red.svg)
 
-[Live Demo](https://apidcloud.github.io/leap-earthquake/)
+[Live Demo](https://leap-earthquake-visualisation.now.sh/)
 
 
 
