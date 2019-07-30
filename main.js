@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader';
+import Stats from 'stats.js';
 
 const plyModelPath = '/earthquakes-model/earthquakes.ply'
 
@@ -33,6 +34,8 @@ let lastPositions = null;
 
 let euler = new THREE.Euler();
 
+let fpsStats = new Stats();
+
 // line helper variables
 //let vertArray = null;
 //let lineGeometry = null;
@@ -46,6 +49,9 @@ let raycaster = new THREE.Raycaster(); */
 function main() {
   const canvas = document.querySelector('#canvas');
   const renderer = new THREE.WebGLRenderer({canvas});
+
+  fpsStats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+  document.body.appendChild(fpsStats.dom);
 
   const fov = 65;
   const aspect = 2;  // the canvas default
@@ -105,10 +111,14 @@ function main() {
     // update leap motion connectivity information
     updateLeapInfo();
 
+    fpsStats.begin();
+
     // handle interaction with leap motion
     handleInteraction(clock.getDelta(), group);
     
     renderer.render(scene, camera);
+
+    fpsStats.end();
 
     requestAnimationFrame(render);
   }
@@ -385,8 +395,8 @@ function handleTwoHandInteraction(frame, object, delta){
 
   //update last euler rotation for fallback when no hands are present
   euler.setFromQuaternion(finalHandQuatRotation);
+  // yaw, pitch, roll
   lastRotation = new THREE.Vector3(euler.y, euler.x, euler.z);
-  
 }
 
 function handleInteraction(delta, object){
