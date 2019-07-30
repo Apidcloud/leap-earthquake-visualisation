@@ -25,7 +25,8 @@ let isLeapConnected = null;
 let options = null;
 
 // used to save last rotation and initial fallback value (when leap hasn't been used yet)
-let lastRotation = [20, 30, 10];
+// yaw, pitch, roll
+let lastRotation = [23.5, 0, 23.5];
 
 // used to save last hand positions when using 2 hand interaction
 let finalHandQuatRotation = new THREE.Quaternion();
@@ -34,6 +35,7 @@ let lastPositions = null;
 
 let euler = new THREE.Euler();
 
+// fps stats foreground and background
 let fpsStats = new Stats('#89B7E2', '#363636');
 
 // line helper variables
@@ -97,8 +99,6 @@ function main() {
 
     group = new THREE.PointCloud(geometry, material);
     group.sortParticles = true;
-    // adjust initial rotation
-    group.rotateX(180);
     scene.add(group);
 
     prepareLeapMotion();
@@ -202,7 +202,7 @@ function getHandsPositionFromFrame(frame){
     }
 
     // we need at least 2 hands to be present
-    if(!isLeapConnected || !frame.valid || frame.id === 0 ||frame.hands.length < 2) {
+    if(!isLeapConnected || !frame.valid || frame.id === 0 || frame.hands.length < 2) {
     	return null;
     }
 

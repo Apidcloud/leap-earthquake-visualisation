@@ -2,6 +2,9 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
+// @Apidcloud
+// added the following arguments so that both foreground and background 
+// can be changed from the outside of the package
 var Stats = function (fg = '#0ff', bg = '#002') {
 
 	var mode = 0;
